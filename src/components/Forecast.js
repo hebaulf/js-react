@@ -1,27 +1,29 @@
 import React from 'react';
-import { Card } from 'semantic-ui-react';
 
 export default function Forecast({forecast}) {
 	return (
 		<div>
-			<Card.Group>
+			<div className="forecast-cards">
 				{forecast.map((data) => {
 					return (
-						<Card>
-							<Card.Content>
-								<Card.Header>
-									<div>High: {Math.round(data.temp.max)} °C</div> 
-									<div>Low: {Math.round(data.temp.min)} °C</div>	
-								</Card.Header>
-								<Card.Meta>{data.humidity} %</Card.Meta>
-								<Card.Description className="temp-desc">
-									{data.weather[0].description}
-								</Card.Description>
-							</Card.Content>
-						</Card>
+						<div className="forecast-cards__item">
+							<div className="forecast-cards__item__temp">
+								<h2>{data.feelsLike}</h2>
+								<div>High: {Math.round(data.temp.max)} °C</div> 
+								<div>Low: {Math.round(data.temp.min)} °C</div>	
+							</div>
+
+							<div className="forecast-cards__item__humid">
+								<div>{data.humidity} %</div>
+							</div>
+
+							<div className="forecast-cards__item__descr">
+								{data.weather[0].description}
+							</div>
+						</div>
 					)
 				})}
-			</Card.Group>
+			</div>
 		</div>
 	)
 }

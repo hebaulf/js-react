@@ -1,41 +1,17 @@
-import axios from 'axios';
-import React, { useEffect, useState } from "react";
-import Header from './components/Header';
-import WeatherCard from './components/WeatherCard';
-import Forecast from './components/Forecast';
 import './App.css';
-
-const URL = `https://api.openweathermap.org/data/2.5/onecall`;
-const API_KEY = `c44f77911579d2cbc82efc379374400c`;
+import React, { useEffect, useState } from 'react';
+import Header from './components/Header';
+import Weather from './components/Weather';
+import Forecast from './components/Forecast';
 
 export default function App() {
-  const [city, setCity] = useState('');
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [temperature, setTemperature] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [sunrise, setSunrise] = useState(null);
-  const [sunset, setSunset] = useState(null);
-  const [iconId, setIconId] = useState('');
-  const [feelsLike, setFeelsLike] = useState(null);
+  const [latitude, setLatitude] = useState([]);
+  const [longitude, setLongitude] = useState([]);
+  const [weatherData, setWeatherData] = useState([]);
   const [forecast, setForecast] = useState([]);
-  
-
-  // const [data, setData] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    axios.get(`${URL}?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&APPID=${API_KEY}`)
-      .then((weatherData) => {
-        console.log(weatherData.data);
-        setCity(weatherData.data.timezone);
-        setTemperature(weatherData.data.current.temp);
-        setHumidity(weatherData.data.current.humidity);
-        setSunrise(weatherData.data.current.sunrise);
-        setSunset(weatherData.data.current.sunset);
-        setIconId(weatherData.data.current.weather[0].id);
-        setFeelsLike(weatherData.data.current.feels_like);
-        setForecast(weatherData.data.daily);
-    });
     
     navigator.geolocation.getCurrentPosition(function(position) {
       setLatitude(position.coords.latitude);
@@ -44,25 +20,99 @@ export default function App() {
       console.log('Longitude is: ', position.coords.longitude);
     });
 
-  }, [latitude, longitude])
+    getWeather(latitude, longitude)
+    .then(weather => {
+      setWeatherData(weather);
+      setError(null);
+    })
+    .catch(err => {
+      setError(err.message);
+    });
+
+    getForecast(latitude, longitude)
+    .then(data => {
+      setForecast(data);
+      setError(null);
+    })
+    .catch(err => {
+      setError(err.message);
+    });
+// eslint-disable-next-line
+  }, [latitude, longitude, error]);
+
+  function handleResponse(response) {
+    if (response.ok) {
+      return response.json();
+      
+    } else {
+      throw new Error("Please Enable your Location in your browser!");
+    }
+  }
+
+  function getWeather(latitude, longitude) {
+    return fetch(
+      `${process.env.API_URL}/weather/?lat=${latitude}&lon=${longitude}&units=metric&APPID=${process.env._API_KEY}`
+    )
+    .then(res => handleResponse(res))
+    .then(weather => {
+      if (Object.entries(weather).length) {
+        const mappedData = mapDataToWeatherInterface(weather);
+        console.log('Mapped Data: ', mappedData);
+        return mappedData;
+      }
+    });
+  }
+
+  function getForecast(latitude, longitude) {
+    return fetch(
+      `${process.env.API_URL}/forecast/?lat=${latitude}&lon=${longitude}&units=metric&APPID=${process.env.API_KEY}`
+    )
+      .then(res => handleResponse(res))
+      .then(forecastData => {
+        if (Object.entries(forecastData).length) {
+          return forecastData.list
+            .filter(forecast => forecast.dt_txt.match(/09:00:00/))
+            .map(mapDataToWeatherInterface);
+        }
+      });
+  }
+
+  function mapDataToWeatherInterface(data) {
+    const mapped = {
+      date: data.dt * 1000, // convert from seconds to milliseconds
+      description: data.weather[0].main,
+      temperature: Math.round(data.main.temp),
+    };
+  
+    // Add extra properties for the five day forecast: dt_txt, icon, min, max
+    if (data.dt_txt) {
+      mapped.dt_txt = data.dt_txt;
+    }
+  
+    return mapped;
+  }
   
   return (
     <>
       <Header />
-      <main className="main">
-        <WeatherCard 
-          city={city}
-          temperature={temperature}
-          humidity={humidity}
-          sunrise={sunrise}
-          sunset={sunset}
-          feelsLike={feelsLike}
-          icon={iconId}
-        />
-        <Forecast 
-          forecast={forecast} 
-        />
-      </main>
+        {(typeof weatherData.main != 'undefined') ? (
+          <main className="main">
+            <Weather weatherData={weatherData} />
+            <Forecast forecast={forecast} weatherData={weatherData} />
+          </main>
+        
+        ) : (
+
+          <div>
+            <div className="active visible">
+              <div className="content">
+                <div className="ui loader">Loading...</div>
+              </div>
+            </div>
+            <img src="/images/wireframe/short-paragraph.png" className="ui image" alt=""/>
+          </div>
+
+        )}  
     </>
   );
 }
