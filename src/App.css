@@ -12,7 +12,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: #282c34;
 }
 
 .page-header h1 {
@@ -29,38 +28,3 @@ body {
   align-items: center;
   padding-top: 40px;
 }
-
-/* .weather-card {
-  display: flex;
-  justify-content: space-between;
-}
-
-.weather-card__header {
-  display: flex;
-  justify-content: space-between;
-}
-
-.weather-card__child {
-  display: flex;
-  justify-content: space-between;
-  font-family: "Poppins", sans-serif !important;
-}
-
-.icon-container {
-  position: relative;
-  right: -30px;
-}
-
-.forecast-wrap {
-  width: 100%;
-  margin: 0 !important;
-}
-.forecast-wrap .temp-desc {
-  text-transform: capitalize;
-}
-
-.forecast-wrap .header {
-  display: flex !important;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-} */

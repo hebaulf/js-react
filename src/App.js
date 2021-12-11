@@ -1,63 +1,83 @@
 import './App.css';
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 import Header from './components/Header';
 import Weather from './components/Weather';
-import Forecast from './components/Forecast';
 
 export default function App() {
+  const [query, setQuery] = useState('');
+	const [weather, setWeather] = useState({});
   const [city, setCity] = useState('');
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
-  const [temperature, setTemperature] = useState(null);
+  const [country, setCountry] = useState('');
+  const [feelsLike, setFeelsLike] = useState(null);
+  const [airTemp, setAirTemp] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [sunrise, setSunrise] = useState(null);
   const [sunset, setSunset] = useState(null);
-  const [iconId, setIconId] = useState('');
-  const [feelsLike, setFeelsLike] = useState(null);
-  const [forecast, setForecast] = useState([]);
+  const [iconId, setIconId] = useState(null);
+  const [windSpeed, setWindSpeed] = useState(null);
+  const [windDeg, setWindDeg] = useState(null);
 
-  navigator.geolocation.getCurrentPosition(function(position) {
-    setLatitude(position.coords.latitude);
-    setLongitude(position.coords.longitude);
-    console.log('Latitude is: ', position.coords.latitude);
-    console.log('Longitude is: ', position.coords.longitude);
-  });
+	const apiUrl = process.env.REACT_APP_API_URL;
+	const apiKey = process.env.REACT_APP_API_KEY;
 
-  useEffect(() => {
-    axios.get(`${process.env.API_URL}?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&APPID=${process.env.API_KEY}`)
-      .then((weatherData) => {
-        console.log(weatherData.data);
-        setCity(weatherData.data.timezone);
-        setTemperature(weatherData.data.current.temp);
-        setHumidity(weatherData.data.current.humidity);
-        setSunrise(weatherData.data.current.sunrise);
-        setSunset(weatherData.data.current.sunset);
-        setIconId(weatherData.data.current.weather[0].id);
-        setFeelsLike(weatherData.data.current.feels_like);
-        setForecast(weatherData.data.daily);
-    });
-// eslint-disable-next-line
-  }, [latitude, longitude]);
+  const weatherApiUrl = `${apiUrl}/weather?q=${query}&units=metric&APPID=${apiKey}`;
+
+  const search = evt => {
+    if (evt.key === "Enter") {
+    fetch(weatherApiUrl)
+      .then(res =>  res.json())
+      .then(weatherData => {
+        console.log(weatherData);
+        setWeather(weatherData);
+        setCity(weatherData.name);
+        setCountry(weatherData.sys.country);
+        setFeelsLike(weatherData.main.feels_like);
+        setAirTemp(weatherData.main.temp);
+        setHumidity(weatherData.main.humidity);
+        setSunrise(weatherData.sys.sunrise);
+        setSunset(weatherData.sys.sunset);
+        setIconId(weatherData.weather[0].id);
+        setWindSpeed(weatherData.wind.speed);
+        setWindDeg(weatherData.wind.deg);
+      })
+      .catch((error) => console.log(error));
+    }
+  }
   
   return (
     <>
-      <Header />
-      <main className="main">
-        <Weather 
-          city={city}
-          temperature={temperature}
-          humidity={humidity}
-          sunrise={sunrise}
-          sunset={sunset}
-          feelsLike={feelsLike}
-          icon={iconId}
-        />
-        <Forecast 
-          forecast={forecast} 
-        />
-      </main>
+      <div className={(typeof weather.main != "undefined") ? ((weather.main.temp > 16) ? 'app warm' : 'app') : 'app'}>
+        <main className="main">
+          <Header
+            text="What the weather"
+          />
+          <div className="search-box">
+            <input 
+              type="text" 
+              className="search-bar" 
+              placeholder="Search city..." 
+              onChange={e => setQuery(e.target.value)} 
+              value={query} 
+              onKeyPress={search} 
+            />
+          </div>
 
+          {(typeof weather.main != "undefined") ? (
+            <Weather 
+              city={city}
+              country={country}
+              feelsLike={feelsLike}
+              airTemp={airTemp}
+              humidity={humidity}
+              sunrise={sunrise}
+              sunset={sunset}
+              icon={iconId}
+              windSpeed={windSpeed}
+              windDeg={windDeg}
+            />
+          ) : ('')}
+        </main>
+      </div>
     </>
   );
 }
