@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Card from "./components/Card/Card";
-// setup
+// Setup
 import { createBoard } from "./setup";
 import { shuffleArray } from "./utils";
 // Types
@@ -9,6 +9,7 @@ import { CardType } from "./setup";
 import { Wrap, Heading, Button, Grid } from "./App.styles";
 
 const App = () => {
+  // State hooks
   const [cards, setCards] = useState<CardType[]>(shuffleArray(createBoard()));
   const [gameWon, setGameWon] = useState(false);
   const [matchedPairs, setMatchedPairs] = useState(0);
@@ -16,6 +17,7 @@ const App = () => {
     undefined
   );
 
+  // Effect hook for all matched cards, game won
   useEffect(() => {
     if (matchedPairs === cards.length / 2) {
       console.log("Game Won");
@@ -23,13 +25,15 @@ const App = () => {
     }
   }, [matchedPairs]);
 
+  // Function for resetting the game
   const refreshGame = () => {
     setClickedCard(undefined);
     setCards(shuffleArray(createBoard()));
   };
 
+  // Function for clicking the cards
   const handleCardClick = (currentClickedCard: CardType) => {
-    // Flip the card
+    // Clikc to flip the card
     setCards((prev) =>
       prev.map((card) =>
         card.id === currentClickedCard.id
