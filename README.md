@@ -10,6 +10,7 @@ I decided not to create an elaborate design for the finished project though, bec
 
 <br/>
 ![Figma Cards](src/img/screenshot-figma.png)
+<br/>
 ![Project Image](src/img/screenshot.png)
 <br/>
 <br/>
