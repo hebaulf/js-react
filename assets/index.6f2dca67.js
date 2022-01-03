@@ -38,7 +38,7 @@ var $=Object.defineProperty,j=Object.defineProperties;var w=Object.getOwnPropert
   position: absolute;
   top: 0px;
   left: 0px;
-`,O=({card:t,callback:e})=>{const a=()=>{t.clickable&&e(t)};return i.createElement(B,{onClick:a},i.createElement(G,{flipped:t.flipped,src:t.frontImage,alt:"card-front"}),i.createElement(L,{flipped:t.flipped,src:t.backImage,alt:"card-back"}))};var W="/assets/card_1.c21a90db.jpg",N="/assets/card_2.e073055b.jpg",P="/assets/card_3.f0a51297.jpg",A="/assets/card_4.c5f2bf31.jpg",R="/assets/card_5.73a5f437.jpg",Y="/assets/card_6.45799545.jpg",F="/assets/card_back.e23245e3.jpg";const m=[W,N,P,A,R,Y],y=()=>[...m,...m].map((t,e)=>({id:`card${e}`,flipped:!1,backImage:F,frontImage:t,clickable:!0,matchingCardId:e<m.length?`card${e+m.length}`:`card${e-m.length}`})),k=t=>t.map(e=>[Math.random(),e]).sort((e,a)=>e[0]-a[0]).map(e=>e[1]),q=d.div`
+`,O=({card:t,callback:e})=>{const a=()=>{t.clickable&&e(t)};return i.createElement(B,{onClick:a},i.createElement(G,{flipped:t.flipped,src:t.frontImage,alt:"card-front"}),i.createElement(L,{flipped:t.flipped,src:t.backImage,alt:"card-back"}))};var W="./assets/card_1.c21a90db.jpg",N="./assets/card_2.e073055b.jpg",P="./assets/card_3.f0a51297.jpg",A="./assets/card_4.c5f2bf31.jpg",R="./assets/card_5.73a5f437.jpg",Y="./assets/card_6.45799545.jpg",F="./assets/card_back.e23245e3.jpg";const m=[W,N,P,A,R,Y],y=()=>[...m,...m].map((t,e)=>({id:`card${e}`,flipped:!1,backImage:F,frontImage:t,clickable:!0,matchingCardId:e<m.length?`card${e+m.length}`:`card${e-m.length}`})),k=t=>t.map(e=>[Math.random(),e]).sort((e,a)=>e[0]-a[0]).map(e=>e[1]),q=d.div`
   width: 100%;
   max-width: 1240px;
   min-width: 320px;
