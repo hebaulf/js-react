@@ -1,7 +1,7 @@
 # Javascript/React - Memory Game
-
-For this project I decided to create a memory game using react hooks(state/effect).  
+  
 The project is set up with React and Vite (a build tool) and deployed to github-pages.  
+I decided to create a memory game using react hooks(state/effect).  
 Code is commented so you can see what each part is doing.  
 I also created the cards from images I found online using Figma.
 
