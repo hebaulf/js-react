@@ -1,28 +1,23 @@
 # Javascript/React - Memory Game
 
 For this project I decided to create a memory game using react hooks(state/effect).  
+The project is set up with React and Vite (a build tool) and deployed to github-pages.  
+Code is commented so you can see what each part is doing.  
+I also created the cards from images I found online using Figma.
+
 
 ### [Link to Live Site](https://hebaulf.github.io/js-react/) 
+### [Link to Figma file for cards](https://www.figma.com/file/4CgYEbhL3pIVVN996kCxPy/Matching-Card-Game?node-id=0%3A1) 
 
 <br>
 
-Since I have been watching the Witcher series during the holidays I decided to make that my theme for this.
-- I created the cards in Figma using a background image with texture and then .png images (without background) I found of characters and the medallion.
-- I decided not to create an elaborate design for the finished project though, because of time, rather focus on the code.
+<p align="center">
+  <img width="80%" src="src/img/screenshot.png">
+</p>
 
 <br>
 
-![Figma Cards](src/img/screenshot-figma.png)
-
-<br>
-<br>
-
-## Getting Started with Create React App
-
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).  
-<br>
-
-### If you want to play around with the code
+## If you want to play around with the code
 
 You can clone the repo:
 
@@ -42,3 +37,5 @@ Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.
+
+You can also 
